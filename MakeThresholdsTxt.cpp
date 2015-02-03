@@ -145,7 +145,7 @@ int main(int argc, char** argv)
     std::string Title = "thresholds_"+tokens.at(2)+"_"+tokens.at(3)+"_"+Gain;
     std::string TitleNoise = "NoiseChannels_"+tokens.at(2)+"_"+tokens.at(3)+"_"+Gain;
     std::string TitleHistP = "RMS_EEP_"+tokens.at(2)+"_"+tokens.at(3)+"_"+Gain;
-    std::string TitleHistM = "RMS_EEP_"+tokens.at(2)+"_"+tokens.at(3)+"_"+Gain;
+    std::string TitleHistM = "RMS_EEM_"+tokens.at(2)+"_"+tokens.at(3)+"_"+Gain;
     std::fstream thresholdsTxt;
     thresholdsTxt.open ((Title+".txt").c_str(), std::fstream::in | std::fstream::out | std::fstream::app);
 
