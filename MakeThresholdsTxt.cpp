@@ -335,12 +335,24 @@ void drawGraphs(TGraphErrors* g1,TGraphErrors* g2,TGraphErrors* g3, std::string 
     g3 -> SetLineWidth(2.);
     g3 -> SetMarkerSize(0.5);
 
+    TLegend* legend = new TLegend(0.85, 0.84, 1., 0.96);
+    legend -> SetFillColor(kWhite);
+    legend -> SetFillStyle(1000);
+    legend -> SetLineWidth(0); 
+    legend -> SetLineColor(kWhite);
+    legend -> SetTextFont(42);
+    legend -> SetTextSize(0.04);
+    legend -> AddEntry(g1,"no #sigma cut","P");
+    legend -> AddEntry(g2,"1 #sigma cut","L");
+    legend -> AddEntry(g3,"2 #sigma cut","L");
+
     TCanvas* c1 = new TCanvas("c1","c1");
     c1 -> cd();
 
     g1 -> Draw("APL");
     g2 -> Draw("same");
     g3 -> Draw("same");
+    legend -> Draw("same");
 
     c1 -> Print((Title+".png").c_str(),"png");
     c1 -> Print((Title+".pdf").c_str(),"pdf");
