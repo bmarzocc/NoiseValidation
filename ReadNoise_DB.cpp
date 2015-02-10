@@ -151,42 +151,11 @@ int main(int argc, char** argv)
         g_RMS_EE_g1_2sigma[iz]= new TGraphErrors();
     }
 
-    char cieta[100], ciphi[100], ciz[100], crawid[100], cped12[100], crms12[100], cped6[100], crms6[100], cped1[100], crms1[100];
-    int ieta, iphi, ix, iy, iz, chStatus;
-    long int rawid;
-    float ped12, rms12, ped6, rms6, ped1, rms1;
-
     std::map<int,std::map<int,std::map<int,float> > > noiseMap_g12;
     std::map<int,std::map<int,std::map<int,float> > > noiseMap_g6;
     std::map<int,std::map<int,std::map<int,float> > > noiseMap_g1;
 
   for(unsigned int ii = 0; ii < inputFiles.size(); ii++){
-
-    std::cout << "Reading inputFile: " << inputFiles.at(ii) << std::endl;
-    std::string inputName = splitString(inputFiles.at(ii),'/').at(splitString(inputFiles.at(ii),'/').size()-1);
-    std::vector<std::string> tokens = splitString(inputName,'_');
-    tokens.at(5) = tokens.at(5).erase(0,2);
-    tokens.at(7) = tokens.at(7).erase(tokens.at(7).size()-4,tokens.at(7).size());
-    tokens.at(7) = tokens.at(7).erase(0,2); 
-
-    int run_min = atoi(tokens.at(5).c_str());
-    int run_max = atoi(tokens.at(7).c_str());
-    int iFile=0;
-    for(unsigned int jj = 0; jj < mapChStatusRun.size(); jj++)
-        if(run_max >= mapChStatusRun[jj].first && run_max <= mapChStatusRun[jj].second) iFile=jj;
-
-    std::cout << "Reading inputFileChStatus: " << inputFilesChStatus.at(iFile) << std::endl;
-    std::map<int,std::map<int,std::map<int,int> > > ichStatus;
-    std::ifstream infileChStatus(inputFilesChStatus.at(iFile).c_str()); 
-    while(infileChStatus >> ieta >> iphi >> iz >> chStatus)
-    {
-           ichStatus[ieta][iphi][iz]=chStatus;
-    }
-    
-    TFile *myOutFile = new TFile(("NoisePlots_DB_"+tokens.at(5)+"_"+tokens.at(7)+".root").c_str(),"RECREATE");
-    std::ifstream infile(inputFiles.at(ii).c_str()); 
-    int iline = 0;
-    std::string line;
 
     char Name[500];
    
@@ -255,6 +224,38 @@ int main(int argc, char** argv)
                 sprintf(Name,"h2_NoiseChannels_EE_g1_2sigma_%d",iz-1);
                 h2_NoiseChannels_EE_g1_2sigma[iz] = new TH2F(Name,Name,100,1,101,100,1,101);
     }
+
+
+    std::cout << "Reading inputFile: " << inputFiles.at(ii) << std::endl;
+    std::string inputName = splitString(inputFiles.at(ii),'/').at(splitString(inputFiles.at(ii),'/').size()-1);
+    std::vector<std::string> tokens = splitString(inputName,'_');
+    tokens.at(5) = tokens.at(5).erase(0,2);
+    tokens.at(7) = tokens.at(7).erase(tokens.at(7).size()-4,tokens.at(7).size());
+    tokens.at(7) = tokens.at(7).erase(0,2); 
+
+    int run_min = atoi(tokens.at(5).c_str());
+    int run_max = atoi(tokens.at(7).c_str());
+    int iFile=0;
+    for(unsigned int jj = 0; jj < mapChStatusRun.size(); jj++)
+        if(run_max >= mapChStatusRun[jj].first && run_max <= mapChStatusRun[jj].second) iFile=jj;
+
+    char cieta[100], ciphi[100], ciz[100], crawid[100], cped12[100], crms12[100], cped6[100], crms6[100], cped1[100], crms1[100];
+    int ieta, iphi, ix, iy, iz, chStatus;
+    long int rawid;
+    float ped12, rms12, ped6, rms6, ped1, rms1;
+
+    std::cout << "Reading inputFileChStatus: " << inputFilesChStatus.at(iFile) << std::endl;
+    std::map<int,std::map<int,std::map<int,int> > > ichStatus;
+    std::ifstream infileChStatus(inputFilesChStatus.at(iFile).c_str()); 
+    while(infileChStatus >> ieta >> iphi >> iz >> chStatus)
+    {
+           ichStatus[ieta][iphi][iz]=chStatus;
+    }
+    
+    TFile *myOutFile = new TFile(("NoisePlots_DB_"+tokens.at(5)+"_"+tokens.at(7)+".root").c_str(),"RECREATE");
+    std::ifstream infile(inputFiles.at(ii).c_str()); 
+    int iline = 0;
+    std::string line;
 
     noiseMap_g12.clear();
     noiseMap_g6.clear();
